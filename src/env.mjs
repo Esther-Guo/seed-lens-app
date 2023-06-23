@@ -18,6 +18,13 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    // NEXT_PUBLIC_PROJECT_ID: z.string().uuid(),
+    // NEXT_PUBLIC_CLIENT_KEY: z.string().length(40),
+    // NEXT_PUBLIC_APP_ID: z.string().uuid(),
+    NEXT_PUBLIC_CHAIN_ID: z.coerce.number().int(),
+    NEXT_PUBLIC_CHAIN_NAME: z.string(),
+    NEXT_PUBLIC_ALCHEMY_RPC: z.string(),
+    // NEXT_PUBLIC_WALLETCONNECT: z.string(),
   },
 
   /**
@@ -28,6 +35,13 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    // NEXT_PUBLIC_PROJECT_ID: process.env.NEXT_PUBLIC_PROJECT_ID,
+    // NEXT_PUBLIC_CLIENT_KEY: process.env.NEXT_PUBLIC_CLIENT_KEY,
+    // NEXT_PUBLIC_APP_ID: process.env.NEXT_PUBLIC_APP_ID,
+    NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
+    NEXT_PUBLIC_CHAIN_NAME: process.env.NEXT_PUBLIC_CHAIN_NAME,
+    NEXT_PUBLIC_ALCHEMY_RPC: process.env.NEXT_PUBLIC_ALCHEMY_RPC,
+    // NEXT_PUBLIC_WALLETCONNECT: process.env.NEXT_PUBLIC_WALLETCONNECT,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
