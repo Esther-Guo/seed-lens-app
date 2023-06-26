@@ -28,3 +28,6 @@ export const alchemyNetwork = isTestnet ? "polygon-mumbai" : "polygon-mainnet";
 // export const loot10Gas = 1000000n;
 // export const whitelistLootGas = 1000000n;
 // export const baseGasPrice = isTestnet ? 2n : 180n;
+
+export const usdcAddress = "0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747";
+export const seedModuleAddress = "0xc8D254365a8Ef47876a7915bd3541dAb0441c3A2";
