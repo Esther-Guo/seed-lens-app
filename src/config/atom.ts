@@ -264,3 +264,20 @@ export const postContentAtom = atom("Hello world!!")
 // );
 
 // export const showWalletSelectAtom = atom<boolean>(false);
+
+export const profileIdAtom = atom<number>(0);
+
+export const usdcBalanceAtom = atom<bigint>(0n);
+export const allownaceAtom = atom<bigint>(0n);
+
+export interface rewardProps {
+  sun: bigint;
+  rain: bigint;
+  soil: bigint;
+}
+
+export const rewardAtom = atom<rewardProps>({
+  sun: 0n,
+  rain: 0n,
+  soil: 0n,
+});
