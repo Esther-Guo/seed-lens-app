@@ -1,5 +1,7 @@
 import { type AppType } from "next/dist/shared/lib/utils";
 import "~/styles/globals.css";
+import 'react-quill/dist/quill.snow.css';
+import "~/styles/editor.scss";
 import { Provider } from "jotai";
 
 import { WagmiConfig, createConfig, configureChains } from "wagmi";

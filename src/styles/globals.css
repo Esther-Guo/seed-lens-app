@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "din";
+    src: local("DIN-MediumItalic"),
+      url("/fonts/din-medium-italic.ttf") format("truetype");
+    font-weight: 500;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: "matrice";
+    src: local("Matrice"), url("/fonts/matrice-bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "proto";
+    src: local("Proto"), url("/fonts/proto-mono-medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "yapari-trial";
+    src: local("Yapari Trial"), url("/fonts/yapari-trial.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+  }

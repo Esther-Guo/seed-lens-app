@@ -1,0 +1,27 @@
+.quill {
+    .ql-snow {
+        .ql-stroke, .ql-stroke-miter {
+            stroke: #c4fa00;
+        }
+        .ql-fill, .ql-stroke.ql-fill {
+            fill: #c4fa00
+        }
+    }
+    .ql-toolbar.ql-snow {
+        border-top: 1px solid #c4fa00;
+        border-bottom: 1px solid #c4fa00;
+        border-left: none;
+        border-right: none;
+    }
+    .ql-container {
+        font-size: 20px;
+        &.ql-snow {
+            border-top: 1px solid #c4fa00;
+            border-bottom: none;
+            border-left: none;
+            border-right: none;
+        }
+    }
+}
+
+
