@@ -211,6 +211,10 @@ import { atom } from "jotai";
 
 export const zoomAtom = atom(1);
 
+export const showEditorAtom = atom(false);
+
+export const postContentAtom = atom("Hello world!!")
+
 // export const zoomedScrollToAtom = atom((get) => {
 //   const zoom = get(zoomAtom);
 //   return sideMenuScrollTo.map((v) => v * zoom);
