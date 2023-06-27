@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import { socialLinks } from "~/constant/social";
 import Footer from "~/components/Footer";
@@ -18,11 +18,11 @@ type Post = {
 
 // Assume you have a static array of posts
 const posts: Post[] = [
-  { id: 1, title: 'First Post', content: 'This is the first post.' },
-  { id: 2, title: 'Second Post', content: 'This is the second post.' },
+  { id: 1, title: "First Post", content: "This is the first post." },
+  { id: 2, title: "Second Post", content: "This is the second post." },
 ];
 
-const Editor = dynamic(() => import('~/components/Editor'), { ssr: false });
+const Editor = dynamic(() => import("~/components/Editor"), { ssr: false });
 
 
 export default function Post() {
@@ -41,7 +41,8 @@ export default function Post() {
   }
 
 
-  const maskClass = showEditor ? 'fixed inset-0 bg-black/[.5] z-50 flex justify-center items-center' : '';
+  const maskClass = showEditor ? "fixed inset-0 bg-black/[.5] z-50 flex justify-center items-center" : "";
+
 
   const handleForkButtonClick = () => {
     setShowEditor(true);
