@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
+import axios from "axios";
 import Footer from "~/components/Footer";
 import InfoCard from "~/components/InfoCard";
 import { showEditorAtom, showMoreAtom } from "~/config/atom";
@@ -32,6 +33,21 @@ export default function Post() {
 
   const [showEditor, setShowEditor] = useAtom(showEditorAtom);
   const [showMore, setShowMore] = useAtom(showMoreAtom);
+
+  const fetchPost = async () => {
+      try {
+          const result = await axios(`/api/getPost?id=${id as string}`);
+        
+          console.log(result.data);
+      } catch (error) {
+          console.error("Error occurred:", error);
+          // Handle error accordingly
+      }
+  }
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fetchPost();
+}, []);
 
   // Find the post based on the id parameter
   const post = posts.find((post) => post.id === parseInt(id as string, 10));
