@@ -106,16 +106,6 @@ export default function Post() {
         </div>
         
         </div>
-        <div className="flex justify-center">
-        <Link className="relative" href={socialLinks.collab} target="_blank">
-            <Image
-              src="/contact.svg"
-              alt="contact button"
-              width={222}
-              height={86}
-            />
-        </Link>
-        </div>
         <Footer />
         {showEditor && 
             <div className={maskClass}>
