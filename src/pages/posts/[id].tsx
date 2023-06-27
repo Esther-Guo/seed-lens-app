@@ -41,7 +41,7 @@ export default function Post() {
   }
 
 
-  const maskClass = showEditor ? 'fixed inset-0 bg-black/[.5] z-50 flex justify-center' : '';
+  const maskClass = showEditor ? 'fixed inset-0 bg-black/[.5] z-50 flex justify-center items-center' : '';
 
   const handleForkButtonClick = () => {
     setShowEditor(true);
@@ -118,7 +118,8 @@ export default function Post() {
         <Footer />
         {showEditor && 
             <div className={maskClass}>
-                <div className="bg-black p-4 opacity-100 w-1/2 h-1/2 flex flex-col items-center border-primary border-2 rounded-[54px]">
+                <div className="bg-black p-4 opacity-100 w-1/2 h-3/4 flex flex-col items-center border-primary border-2 rounded-[54px]">
+                    
                     <div className="flex w-full justify-between">
                         <div className="font-second text-primary text-3xl">CREATE POST</div>
                         <div>
@@ -127,7 +128,12 @@ export default function Post() {
                             </button>
                         </div>
                     </div>
+                    <div className="bg-primary rounded mx-4 my-2 px-4">
+                        <span className="text-sm leading-4">The platform is providing a subsidy of 2.8 metics  as a reward to per layer of post where your inspired idea came from. T&C applied.</span>
+                        <button className="inline-block"><Image src="/moreInfo.png" alt="more info" width={56} height={16}></Image></button>
+                    </div>
                     <Editor />
+                    
                     <div className="self-end"><button className="bg-primary p-2 rounded-lg"><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
                 </div>
             </div>
