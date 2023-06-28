@@ -3,10 +3,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
-import { socialLinks } from "~/constant/social";
+import { useAtom, useAtomValue } from "jotai";
+import axios from "axios";
 import Footer from "~/components/Footer";
-import { showEditorAtom } from "~/config/atom";
+import InfoCard from "~/components/InfoCard";
+import { showEditorAtom, showMoreAtom, postContentAtom } from "~/config/atom";
 
 
 
@@ -31,7 +32,29 @@ export default function Post() {
   const { id } = router.query;
 
   const [showEditor, setShowEditor] = useAtom(showEditorAtom);
-  
+  const [showMore, setShowMore] = useAtom(showMoreAtom);
+
+  const fetchPost = async () => {
+      try {
+          const result = await axios(`/api/getPost?id=${id as string}`);
+        
+          console.log(result.data);
+      } catch (error) {
+          console.error("Error occurred:", error);
+          // Handle error accordingly
+      }
+  }
+
+
+  const postContent = useAtomValue(postContentAtom);
+
+  const handlePost = () => {
+    console.log(postContent);
+  }
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fetchPost();
+}, []);
 
   // Find the post based on the id parameter
   const post = posts.find((post) => post.id === parseInt(id as string, 10));
@@ -41,7 +64,7 @@ export default function Post() {
   }
 
 
-  const maskClass = showEditor ? "fixed inset-0 bg-black/[.5] z-50 flex justify-center items-center" : "";
+  const maskClass = showEditor ? "fixed inset-0 bg-black/[.5] z-50 flex justify-around items-center" : "";
 
 
   const handleForkButtonClick = () => {
@@ -51,6 +74,14 @@ export default function Post() {
   const handleCloseButtonClick = () => {
     setShowEditor(false);
   };
+
+  const handleMoreInfoButtonClick = () => {
+    setShowMore(true);
+  };
+
+  const handleCloseInfoClick = () => {
+    setShowMore(false);
+  }
 
   return (
     <div className="bg-black">
@@ -106,19 +137,11 @@ export default function Post() {
         </div>
         
         </div>
-        <div className="flex justify-center">
-        <Link className="relative" href={socialLinks.collab} target="_blank">
-            <Image
-              src="/contact.svg"
-              alt="contact button"
-              width={222}
-              height={86}
-            />
-        </Link>
-        </div>
         <Footer />
+
         {showEditor && 
             <div className={maskClass}>
+                {/* editor card */}
                 <div className="bg-black p-4 opacity-100 w-1/2 h-3/4 flex flex-col items-center border-primary border-2 rounded-[54px]">
                     
                     <div className="flex w-full justify-between">
@@ -131,12 +154,14 @@ export default function Post() {
                     </div>
                     <div className="bg-primary rounded mx-4 my-2 px-4">
                         <span className="text-sm leading-4">The platform is providing a subsidy of 2.8 metics  as a reward to per layer of post where your inspired idea came from. T&C applied.</span>
-                        <button className="inline-block"><Image src="/moreInfo.png" alt="more info" width={56} height={16}></Image></button>
+                        <button className="inline-block" onClick={handleMoreInfoButtonClick}><Image src="/moreInfo.png" alt="more info" width={56} height={16}></Image></button>
                     </div>
                     <Editor />
                     
-                    <div className="self-end"><button className="bg-primary p-2 rounded-lg"><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
+                    <div className="self-end"><button className="bg-primary p-2 rounded-lg" onClick={handlePost}><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
                 </div>
+                {/* more info card */}
+                {showMore && <InfoCard handleCloseInfoClick={handleCloseInfoClick}/>}
             </div>
         }
     </div>

@@ -213,7 +213,13 @@ export const zoomAtom = atom(1);
 
 export const showEditorAtom = atom(false);
 
-export const postContentAtom = atom("Hello world!!");
+export const showMoreAtom = atom(false);
+
+export const postContentAtom = atom("Hello world!!")
+
+export const langAtom = atom("中文")
+
+export const originPostLikeAtom = atom(336);
 
 // export const zoomedScrollToAtom = atom((get) => {
 //   const zoom = get(zoomAtom);
