@@ -217,6 +217,8 @@ export const showMoreAtom = atom(false);
 
 export const postContentAtom = atom("Hello world!!")
 
+export const langAtom = atom("中文")
+
 // export const zoomedScrollToAtom = atom((get) => {
 //   const zoom = get(zoomAtom);
 //   return sideMenuScrollTo.map((v) => v * zoom);

@@ -3,11 +3,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import axios from "axios";
 import Footer from "~/components/Footer";
 import InfoCard from "~/components/InfoCard";
-import { showEditorAtom, showMoreAtom } from "~/config/atom";
+import { showEditorAtom, showMoreAtom, postContentAtom } from "~/config/atom";
 
 
 
@@ -43,6 +43,13 @@ export default function Post() {
           console.error("Error occurred:", error);
           // Handle error accordingly
       }
+  }
+
+
+  const postContent = useAtomValue(postContentAtom);
+
+  const handlePost = () => {
+    console.log(postContent);
   }
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -151,7 +158,7 @@ export default function Post() {
                     </div>
                     <Editor />
                     
-                    <div className="self-end"><button className="bg-primary p-2 rounded-lg"><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
+                    <div className="self-end"><button className="bg-primary p-2 rounded-lg" onClick={handlePost}><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
                 </div>
                 {/* more info card */}
                 {showMore && <InfoCard handleCloseInfoClick={handleCloseInfoClick}/>}
