@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { atom } from "jotai";
 // import { avatarEquipPath } from "./role";
-// import { atomWithStorage } from "jotai/utils";
+import { atomWithStorage } from "jotai/utils";
 // import { type WhitelistRes } from "~/pages/api/whitelist";
 // import { type Address } from "viem";
 
@@ -213,7 +213,7 @@ export const zoomAtom = atom(1);
 
 export const showEditorAtom = atom(false);
 
-export const postContentAtom = atom("Hello world!!")
+export const postContentAtom = atom("Hello world!!");
 
 // export const zoomedScrollToAtom = atom((get) => {
 //   const zoom = get(zoomAtom);
@@ -265,7 +265,7 @@ export const postContentAtom = atom("Hello world!!")
 
 // export const showWalletSelectAtom = atom<boolean>(false);
 
-export const profileIdAtom = atom<number>(0);
+export const profileIdAtom = atomWithStorage("profileId", 0);
 
 export const usdcBalanceAtom = atom<bigint>(0n);
 export const allownaceAtom = atom<bigint>(0n);
@@ -281,3 +281,12 @@ export const rewardAtom = atom<rewardProps>({
   rain: 0n,
   soil: 0n,
 });
+
+export const newMetadataURLAtom = atom<string>("");
+export const pubIdPointedAtom = atom<number>(3);
+export const profileIdPointedAtom = atom<number>(658);
+
+export const hasLensHandleAtom = atom<boolean>(true);
+export const profileIdToCheckAtom = atom<number>(0);
+
+export const lastCreateCommentEventDataAtom = atom<(string | bigint)[]>([]);
