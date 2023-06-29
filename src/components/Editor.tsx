@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
 
 
 import { useAtom } from "jotai";
@@ -8,14 +8,14 @@ import { postContentAtom } from "~/config/atom";
 const modules = {
     toolbar: [
     //   [{ 'header': false }],
-      ['bold', 'italic', 'code-block'],
-      ['image']
+      ["bold", "italic", "code-block"],
+      ["image"]
     ],
   }
 const formats = [
-    'header',
-    'bold', 'italic', 'code-block',
-    'image'
+    "header",
+    "bold", "italic", "code-block",
+    "image"
   ]
 
 const Editor = () => {

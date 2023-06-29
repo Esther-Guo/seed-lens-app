@@ -31,3 +31,5 @@ export const alchemyNetwork = isTestnet ? "polygon-mumbai" : "polygon-mainnet";
 
 export const usdcAddress = "0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747";
 export const seedModuleAddress = "0xc8D254365a8Ef47876a7915bd3541dAb0441c3A2";
+export const lensProxyAddress = "0x7582177F9E536aB0b6c721e11f383C326F2Ad1D5";
+export const revertCollectModule = "0x75fe7513709E6Ca573d017cE979F7d35192CE0d5";

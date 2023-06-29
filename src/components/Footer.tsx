@@ -25,6 +25,16 @@ function Footer() {
         </Link>
       </div> */}
       {/* text */}
+      <div className="flex justify-center">
+        <Link className="relative" href={socialLinks.collab} target="_blank">
+            <Image
+              src="/contact.svg"
+              alt="contact button"
+              width={222}
+              height={86}
+            />
+        </Link>
+      </div>
       <div className="my-[33px] flex w-full justify-center">
         <div className=" text-center font-second text-[28px] text-primary">
           PFP-DAO © 2023, All rights reserved |{" "}
