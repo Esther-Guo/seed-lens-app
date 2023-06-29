@@ -38,9 +38,8 @@ const ImageList = () => {
   ];
 
   const handleMouseEnter = (index: number) => {
-    const imageUrl = images[index];
-    setCurrentImageUrl(imageUrl);
-    
+    // const imageUrl = images[index];
+    // setCurrentImageUrl(imageUrl);
   };
 
   const handleMouseLeave = () => {
