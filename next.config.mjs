@@ -18,5 +18,16 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "101.200.91.164",
+        port: "9000",
+        pathname: "/lens/**",
+      },
+    ],
+  },
 };
 export default config;
