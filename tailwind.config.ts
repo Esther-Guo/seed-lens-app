@@ -20,6 +20,8 @@ export default {
         light: "#F8F2E6",
         darkGray: "#898989",
         bronze: "#c9a063",
+        pink:"#FF91AF",
+        green:"#C4FA00",
       },
     },
   },
