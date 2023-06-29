@@ -15,7 +15,6 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { env } from "~/env.mjs";
 
 import useZoom from "~/hooks/useZoom";
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [polygonMumbai, polygon],
   [

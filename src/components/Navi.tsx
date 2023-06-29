@@ -1,11 +1,39 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import detectEthereumProvider from '@metamask/detect-provider'
 
 function Navi() {
+  let [injectedProvider, setInjectedProvider] = useState<Boolean>(false)
+  let [isMetaMask, setIsMetaMask] = useState<Boolean>(false)
+  const [hasProvider, setHasProvider] = useState<boolean | null>(null)
+  const initialState = { accounts: [] }               /* New */
+  const [wallet, setWallet] = useState(initialState)  /* New */
+  useEffect(() => {
+    if (typeof window.ethereum !== 'undefined') {
+      setInjectedProvider(true)
+      setIsMetaMask(window.ethereum.isMetaMask)
+    }
+    const getProvider = async () => {
+      const provider = await detectEthereumProvider({ silent: true })
+      setHasProvider(Boolean(provider))
+    }
+    getProvider()
+  }, []);
 
-  let [loginModelShow,setLoginModelShow] = useState<Boolean>(false)
+  const updateWallet = async (accounts: any) => {     /* New */
+    setWallet({ accounts })                          /* New */
+  }                                                  /* New */
+
+  const handleConnect = async () => {                /* New */
+    console.log(window)
+    let accounts = await window.ethereum.request({   /* New */
+      method: "eth_requestAccounts",                 /* New */
+    })                                           /* New */
+    updateWallet(accounts)                           /* New */
+  }                                                  /* New */
+
+  let [loginModelShow, setLoginModelShow] = useState<Boolean>(false)
 
   function handleLogin() {
     setLoginModelShow(true)
@@ -16,18 +44,18 @@ function Navi() {
   }
 
   function signWidthLens() {
-    
+
   }
 
   return (
-    <nav className="fixed top-[1.5rem] left-[0] right-[0] z-20 container mx-auto px-6 py-2 flex justify-between items-center bg-black proto rounded-lg">
+    <nav className="fixed z-100 top-[1.5rem] left-[0] right-[0] z-20 container mx-auto px-6 py-2 flex justify-between items-center bg-black proto rounded-lg">
       <div className="flex space-x-4 text-white">
         <Image
-          src="/public/favicon.ico"
+          src="/favicon.ico"
           alt="seed"
           width={40}
           height={40}
-          className="flex items-center justify-center text-md px-4 py-2"
+          className="flex items-center justify-center text-md"
         />
         <p className="flex items-center justify-center text-md px-4 py-2 ">TESTNET ALPHR WITH TESTING TOKEN.</p>
       </div>
@@ -70,10 +98,16 @@ function Navi() {
                       </button>
                     </div>
                   </div>
-                  <button type="button" className="hover:bg-gray-100 dark:hover:bg-gray-700 flex w-full items-center justify-between space-x-2.5 overflow-hidden rounded-xl border px-4 py-3 outline-none dark:border-gray-700">
-                    <span>MetaMask</span>
-                    <img src="https://static-assets.lenster.xyz/images/wallets/browser-wallet.svg" draggable="false" className="h-6 w-6" height="24" width="24" alt="injected" />
-                  </button>
+                  <h2>Injected Provider {injectedProvider ? 'DOES' : 'DOES NOT'} Exist</h2>
+                  {isMetaMask &&
+                    <button type="button" className="hover:bg-gray-100 dark:hover:bg-gray-700 flex w-full items-center justify-between space-x-2.5 overflow-hidden rounded-xl border px-4 py-3 outline-none dark:border-gray-700" onClick={handleConnect}>
+                      <span>MetaMask</span>
+                      <img src="https://static-assets.lenster.xyz/images/wallets/browser-wallet.svg" draggable="false" className="h-6 w-6" height="24" width="24" alt="injected" />
+                    </button>
+                  }
+                  {wallet.accounts.length > 0 &&                /* New */
+                    <div>Wallet Accounts: {wallet.accounts[0]}</div>
+                  }
                 </div>
               </div>
             </div>
