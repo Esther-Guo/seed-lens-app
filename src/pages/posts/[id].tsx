@@ -95,7 +95,7 @@ const PostDetail: React.FC = ({id}) => {
     const reqObj: PostMetadata = {
       content: postText, 
       metadataId: uuid as string, 
-      inspirationId: parseInt(pubId as string),
+      inspirationId: parseInt(id as string),
       image: imageList,
       title: "test post",
       profileId: 24, 
@@ -103,7 +103,6 @@ const PostDetail: React.FC = ({id}) => {
     } 
     const response = await axios.post("/api/post", reqObj);
     console.log("Post posted:", response.data);
-
 
   }
  
