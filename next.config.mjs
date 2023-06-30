@@ -3,7 +3,7 @@
  * for Docker builds.
  */
 await import("./src/env.mjs");
-
+import { createProxyMiddleware } from 'http-proxy-middleware';
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -28,6 +28,16 @@ const config = {
         pathname: "/lens/**",
       },
     ],
+
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/post/:path*',
+  //       destination: 'http://101.200.91.164:8080/post/:path*', // 替换为目标域名
+  //       // 将请求路径中的 /api/ 替换为目标域名的 /api/ ，例如 /api/posts -> http://example.com/api/posts
+  //     },
+  //   ];
+
   },
 };
 export default config;

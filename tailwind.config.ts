@@ -20,7 +20,20 @@ export default {
         light: "#F8F2E6",
         darkGray: "#898989",
         bronze: "#c9a063",
+        pink:"#FF91AF",
+        green:"#C4FA00",
       },
+      width: {
+        '320': '320px'
+      },
+      height: {
+        '320': '320px',
+        '100': '100%'
+      },
+      maxHeight: {
+        '500': '500px',
+        '600': '600px'
+      }
     },
   },
   variants: {
