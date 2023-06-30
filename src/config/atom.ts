@@ -219,7 +219,26 @@ export const postContentAtom = atom("Hello world!!")
 
 export const langAtom = atom("中文")
 
-export const originPostLikeAtom = atom(336);
+export const commentTextAtom = atom("");
+
+export const ifLikeAtom = atom(1);
+
+export const postDataAtom = atom<PostStruct>({
+    comments: [],
+    content: "",
+    createTime: "",
+    id: null,
+    images: [],
+    inspirationId: null,
+    likeNum: 0,
+    postId: "",
+    profileId: null,
+    title: ""
+});
+
+export const imageListAtom = atom<string[]>([]);
+
+export const postTextAtom = atom("");
 
 // export const zoomedScrollToAtom = atom((get) => {
 //   const zoom = get(zoomAtom);

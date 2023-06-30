@@ -1,3 +1,4 @@
+
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
@@ -7,7 +8,7 @@ export default async function handler(
   ) {
     try {
       const { id } = req.query;
-      const response = await axios.get(`http://101.200.91.164:8080/post/getPost?postId=${id as string}`);
+      const response = await axios.get("http://101.200.91.164:8080/post/getNextPost");
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const posts = (response.data as PostRes).data;
       res.status(200).json({

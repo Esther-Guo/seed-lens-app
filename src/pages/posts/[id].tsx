@@ -1,71 +1,162 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAtom, useAtomValue } from "jotai";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import Footer from "~/components/Footer";
 import InfoCard from "~/components/InfoCard";
-import { showEditorAtom, showMoreAtom, postContentAtom } from "~/config/atom";
+import Idea from "~/components/Idea";
+import { 
+  showEditorAtom, 
+  showMoreAtom, 
+  postContentAtom, 
+  commentTextAtom, 
+  postDataAtom, 
+  ifLikeAtom,
+  imageListAtom,
+  postTextAtom
+} from "~/config/atom";
+import useLensProxy from "~/hooks/useLensProxy";
+import { revertCollectModule, seedModuleAddress } from "~/config/viem";
 
-
-
-type Post = {
-    id: number;
-    title: string;
-    content: string;
-  };
-
-// Assume you have a static array of posts
-const posts: Post[] = [
-  { id: 1, title: "First Post", content: "This is the first post." },
-  { id: 2, title: "Second Post", content: "This is the second post." },
-];
 
 const Editor = dynamic(() => import("~/components/Editor"), { ssr: false });
 
+// const {
+//   createProfileWrite,
+//   profileResult,
+//   fetchProfileResult,
+//   fetchProfileID,
+//   fetchBalance: fetchNFTBalance,
+//   commentWrite,
+// } = useLensProxy();
 
-export default function Post() {
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      id: context.params.id
+    }
+  };
+}
 
-  const router = useRouter();
-  const { id } = router.query;
+
+
+const PostDetail: React.FC = ({id}) => {
+
+  // const router = useRouter();
+  const [profileId, pubId] = (id as string).split("-");
 
   const [showEditor, setShowEditor] = useAtom(showEditorAtom);
   const [showMore, setShowMore] = useAtom(showMoreAtom);
+  const [commentText, setCommentText] = useAtom(commentTextAtom);
+  const [postData, setPostData] = useAtom(postDataAtom);
+  const [ifLike, setIfLike] = useAtom(ifLikeAtom);
+  const [imageList, setImageList] = useAtom(imageListAtom);
+  const [postText, setPostText] = useAtom(postTextAtom);
 
-  const fetchPost = async () => {
+  const fetchPost = useCallback(async () => {
       try {
           const result = await axios(`/api/getPost?id=${id as string}`);
-        
-          console.log(result.data);
+          // console.log(result);
+          setPostData(result.data as PostStruct);
       } catch (error) {
           console.error("Error occurred:", error);
-          // Handle error accordingly
       }
-  }
-
-
+  }, [id, setPostData])
+ 
   const postContent = useAtomValue(postContentAtom);
 
-  const handlePost = () => {
-    console.log(postContent);
+  const extractImage = async (postContent: string) => {
+    const imageRegex = /<img.*?src="(.*?)".*?>/g;
+    const matches = postContent.matchAll(imageRegex);
+    const images: string[] = [];
+    let remainingHTML = postContent;
+
+    for (const match of matches) {
+      const imageUrl = match[1];
+      const response = await axios.post("/api/uploadImage", {img: imageUrl});
+      // console.log(response.data)
+      images.push(response.data);
+      remainingHTML = remainingHTML.replace(match[0], ""); // Remove the matched image tag
+    }
+
+    setImageList(images);
+    setPostText(remainingHTML);
   }
+
+  const handlePost = async () => {
+    const uuid = uuidv4();
+    // console.log(postContent);
+    void extractImage(postContent);
+
+    const reqObj: PostMetadata = {
+      content: postText, 
+      metadataId: uuid as string, 
+      inspirationId: parseInt(id as string),
+      image: imageList,
+      title: "test post",
+      profileId: 24, 
+      type: 0,
+    } 
+    const response = await axios.post("/api/post", reqObj);
+    console.log("Post posted:", response.data);
+
+  }
+ 
+  const handleLikeClick = async () => {
+    const response = await axios.post("/api/like", { id: postData.id, profileId: 1 });
+    setPostData((prevPostData) => ({...prevPostData, likeNum: response.data.likeNum} ))
+    setIfLike(response.data.ifLike);
+    console.log("liked:", response); 
+  }
+
+  const handleIdeaSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const handler = async () => {
+      // Make the API request to post the comment
+      const response = await axios.post("/api/post", { content: commentText, postPointId: id as string, profilePointId: parseInt(profileId as string), profileId: 24, type: 1 });
+      console.log("Comment posted:", response.data);
+
+      // // contract interaction
+      // const args = {
+      //   profileId: profileId,
+      //   contentURI: response.data.msg,
+      //   profileIdPointed: parseInt(profileId as string),
+      //   pubIdPointed: id as string,
+      //   referenceModuleData: toBytes("0x"),
+      //   collectModule: revertCollectModule,
+      //   collectModuleInitData: encodePacked(["bool"], [true]),
+      //   referenceModule: seedModuleAddress,
+      //   referenceModuleInitData: encodePacked([], []),
+      // };
+      // console.log("comment args", args);
+
+      // commentWrite({
+      //   args: [args],
+      // });
+
+      // Clear the comment input
+      setCommentText("");
+      void fetchPost();
+    };
+
+    void handler();
+  };
+
+  const handleCommentTextChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setCommentText(event.target.value);
+  };
+
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fetchPost();
-}, []);
-
-  // Find the post based on the id parameter
-  const post = posts.find((post) => post.id === parseInt(id as string, 10));
-
-  if (!post) {
-    return <p>Post not found</p>;
-  }
-
+    // console.log(id)
+    void fetchPost();
+  }, [fetchPost]);
 
   const maskClass = showEditor ? "fixed inset-0 bg-black/[.5] z-50 flex justify-around items-center" : "";
-
 
   const handleForkButtonClick = () => {
     setShowEditor(true);
@@ -85,7 +176,6 @@ export default function Post() {
 
   return (
     <div className="bg-black">
-        <div className="h-[1062px]">
         {/* 背景 */}
         <div className="absolute left-0 top-0 z-1">
             <Image
@@ -99,32 +189,73 @@ export default function Post() {
 
         {/* post detail */}
         <div className="flex">
-            <div className="w-2/3 relative z-10">
+            <div className="w-2/3 z-10">
                 {/* Post Content */}
+                
+                <div className="bg-black mx-4 p-4 opacity-100 flex flex-col items-center border-primary border-2 rounded-[24px]">
+                  {/* cover image */}
+                  <div>
+                    <Image src={postData.images[0] as string} alt="cover image" width="0" height="0" sizes="100vw" className="w-full max-h-80 rounded"></Image>
+                  </div>
+                  <div className="text-light w-2/3">
+                    <div className="mt-2 font-second text-primary text-3xl self-start">{postData.title}</div>
+                    <div className="flex justify-between m-2 text-primary">
+                      <Image className="inline-block" src="/origin/author.png" alt="author avatar" width={96} height={20}></Image>
+                      <div><Image className="inline-block mr-1" src="/likeIcon.png" alt="" width={20} height={20}></Image>{postData.likeNum}</div>
+                    </div>
+                    <div>
+                      {postData.content}
+                      {/* <p>In this boundless and vibrant tapestry of life, Social Entertainment Equity Distribution (SEED) emerges like a seed, cradling the very essence of human wisdom. It is enswathed in the soil of love, nourished by the rain of unwavering commitment, and basked in the sunlight of impassioned fervor, heralding the advent of an unprecedented social domain. </p>
+                      <br />
+                      <p>SEED, a magnificent decentralized platform built upon the very bedrock of Lens Protocol, dons the sacred mantle of safeguarding the luminescence of creativity. With an unwavering resolve, it etches the authenticity and integrity of content into the annals of time, an indelible inscription for generations to witness. I beseech you to cast your gaze upon the Proof of Thought, a mechanism that stands as a testament to the very fabric of our cognizance and aspirations. Documents https://documents.pfp-dao.io/content-creators/seed-on-chaining-contents </p>
+                      <br />
+                      <p>在这个浩瀚而多彩的世界中，Social Entertainment Equity Distribution（SEED）像一颗孕育着人类智慧的种子，被爱的土壤包裹，被执着的雨水滋润，被热血的阳光鼓励，开创了一个全新的社交领域。 </p>
+                      <br />
+                      <p>SEED，一个基于Lens Protocol宏伟的去中心化链上平台，担当着守护创作之光的神圣使命，将内容的真实性和完整性，永久镌刻在时间的历史上。 敬请关注 Proof of Thought 思想证明机制。 文件说明 https://documents-cn.pfp-dao.io/nei-rong-chuang-zuo-yi-shu-jia/seed-chuang-zuo-zhe-nei-rong-shang-lian </p> */}
+                    </div>
+                    <div className="flex justify-between mt-2">
+                      <div className="text-darkGray">{postData.createTime}</div>
+                      <div className="text-primary font-second flex">
+                        <div><button onClick={handleLikeClick}>{ifLike? (<Image className="inline-block mr-1" src="/likeIcon.png" alt="" width={20} height={20}></Image>):(<Image className="inline-block mr-1" src="/likeIconFilled.png" alt="" width={20} height={20}></Image>)}{postData.likeNum}</button></div>
+                        <div className="ml-2"><button><Image className="inline-block mr-1" src="/commentIcon.png" alt="" width={20} height={20}></Image>{postData.comments.length}</button></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 {/* Post Ideas */}
-                <div className="max-w-full p-4">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vestibulum eros eget sollicitudin eleifend. Pellentesque nec mollis dolor. Duis hendrerit cursus vulputate. Proin accumsan velit vitae lacus sodales gravida. Proin tincidunt tellus efficitur blandit lobortis. Quisque quam ligula, vulputate non eleifend in, lobortis eget dolor. Suspendisse vitae augue ut ligula consectetur accumsan. Sed blandit tellus tortor, in porttitor eros cursus vel. Curabitur rutrum ipsum tellus, vel laoreet justo bibendum in. Cras lobortis, risus quis consectetur sollicitudin, velit lacus ultricies arcu, vel gravida mi sapien sed lorem.
-
-                Sed sed congue mi. Vivamus ultricies arcu vel lacus placerat, vitae blandit orci blandit. Duis nec massa faucibus, varius arcu sed, sodales nisi. Nam viverra erat id lectus tincidunt dictum. Donec eros elit, consectetur ut purus eget, tincidunt volutpat nulla. Sed nec elit tempus, elementum orci sit amet, condimentum nunc. Vivamus faucibus a quam vitae porta. Proin nec ante ultrices, viverra nunc eu, aliquam quam. Suspendisse potenti. Sed sapien ligula, fermentum nec mollis sagittis, pulvinar vel metus.</p>
+                <div className="bg-black m-4 p-4 opacity-100 flex flex-col items-center border-primary border-2 rounded-[24px] divide-y-2 divide-primary">
+                  {/* add comment */}
+                  <div className="my-4 w-2/3">
+                    <form onSubmit={handleIdeaSubmit} className="flex justify-between">
+                      <input type="text" value={commentText} onChange={handleCommentTextChange} placeholder="DROP YOUR IDEA!" className="w-2/3 appearance-none bg-transparent border-b border-primary text-light mr-3 py-1 px-2 leading-tight focus:outline-none"/>
+                      <button type="submit" className="bg-primary text-black font-bold py-2 px-4 rounded">DROP</button>
+                    </form>
+                  </div>
+                  {/* display comment */}
+                  <Idea ideaData={postData.comments} />
                 </div>
 
-                <div className="fixed bottom-10 left-10 ">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    Fixed Button
+                {/* button group */}
+                <div className="fixed bottom-10 left-10">
+                <button>
+                    <Image src="/lastBtn.png" alt="" width="0" height="0" sizes="100vw" className="w-[96px] h-auto"></Image>
+                    {/* <Image src="/lastBtn.png" alt="" fill={true}></Image> */}
                 </button>
                 </div>
-                <div className="fixed bottom-10 right-1/3">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    Fixed Button
+                <div className="fixed bottom-10 end-1/3">
+                <button>
+                    <Image src="/nextBtn.png" alt="" width="0" height="0" sizes="100vw" className="w-[96px] h-auto"></Image>
                 </button>
                 </div>
+
             </div>
-            <div className="w-1/3">
+            <div className="w-1/3 mr-8 p-4 z-10 divide-y divide-primary">
                 {/* Inspired by */}
+                <div className="text-primary font-second text-3xl"><Image src="/inspiredIcon.png" alt="" width="0" height="0" sizes="100vw" className="w-[30px] h-auto inline-block"></Image>{" "}INSPIRED BY</div>
                 {/* Forked */}
-                <p>{post.content}</p>
+                <div className="text-primary font-second text-3xl"><Image src="/branchIcon.png" alt="" width="0" height="0" sizes="100vw" className="w-[30px] h-auto inline-block"></Image>{" "}FORKED BRANCHES</div>
             </div>
-            <div className="fixed bottom-10 right-56">
+            <div className="fixed bottom-10 right-56 z-10">
                 <button className="bg-black text-primary font-bold py-2 px-4 rounded border-primary border-2">
                     Drop Idea
                 </button>
@@ -136,7 +267,6 @@ export default function Post() {
             
         </div>
         
-        </div>
         <Footer />
 
         {showEditor && 
@@ -157,8 +287,7 @@ export default function Post() {
                         <button className="inline-block" onClick={handleMoreInfoButtonClick}><Image src="/moreInfo.png" alt="more info" width={56} height={16}></Image></button>
                     </div>
                     <Editor />
-                    
-                    <div className="self-end"><button className="bg-primary p-2 rounded-lg" onClick={handlePost}><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
+                    <div className="self-end mt-16"><button className="bg-primary p-2 rounded-lg" onClick={handlePost}><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
                 </div>
                 {/* more info card */}
                 {showMore && <InfoCard handleCloseInfoClick={handleCloseInfoClick}/>}
@@ -167,3 +296,5 @@ export default function Post() {
     </div>
   );
 }
+
+export default PostDetail;
