@@ -26,8 +26,18 @@ const Editor = () => {
 
   const handleContentChange = (value: string) => {
     setPostContent(value);
-    console.log(value)
+    const imgs = Array.from(
+      value.matchAll("img[src^=\"data:\"]")
+    );
+    // for (const img of imgs) {
+    //   img.classList.add("loading");
+    //   img.setAttribute("src", await uploadBase64Img(img.getAttribute("src")));
+    //   img.classList.remove("loading");
+    // }
+    console.log(value);
+    // console.log(imgs)
   }
+
 
   const attachQuillRefs = (): void => {
     if (reactQuillRef.current) {
@@ -49,7 +59,7 @@ const Editor = () => {
       formats={formats} 
       value={postContent} 
       onChange={handleContentChange} 
-      className="text-white w-full grow"
+      className="text-white w-full h-3/5"
     />;
 }
 

@@ -5,12 +5,34 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAtom, useAtomValue } from "jotai";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import Footer from "~/components/Footer";
 import InfoCard from "~/components/InfoCard";
 import Idea from "~/components/Idea";
-import { showEditorAtom, showMoreAtom, postContentAtom, commentTextAtom, postDataAtom, ifLikeAtom } from "~/config/atom";
+import { 
+  showEditorAtom, 
+  showMoreAtom, 
+  postContentAtom, 
+  commentTextAtom, 
+  postDataAtom, 
+  ifLikeAtom,
+  imageListAtom,
+  postTextAtom
+} from "~/config/atom";
+import useLensProxy from "~/hooks/useLensProxy";
+import { revertCollectModule, seedModuleAddress } from "~/config/viem";
+
 
 const Editor = dynamic(() => import("~/components/Editor"), { ssr: false });
+
+// const {
+//   createProfileWrite,
+//   profileResult,
+//   fetchProfileResult,
+//   fetchProfileID,
+//   fetchBalance: fetchNFTBalance,
+//   commentWrite,
+// } = useLensProxy();
 
 export async function getServerSideProps(context) {
   return {
@@ -19,6 +41,8 @@ export async function getServerSideProps(context) {
     }
   };
 }
+
+
 
 const PostDetail: React.FC = ({id}) => {
 
@@ -30,6 +54,8 @@ const PostDetail: React.FC = ({id}) => {
   const [commentText, setCommentText] = useAtom(commentTextAtom);
   const [postData, setPostData] = useAtom(postDataAtom);
   const [ifLike, setIfLike] = useAtom(ifLikeAtom);
+  const [imageList, setImageList] = useAtom(imageListAtom);
+  const [postText, setPostText] = useAtom(postTextAtom);
 
   const fetchPost = useCallback(async () => {
       try {
@@ -43,8 +69,42 @@ const PostDetail: React.FC = ({id}) => {
  
   const postContent = useAtomValue(postContentAtom);
 
-  const handlePost = () => {
-    console.log(postContent);    
+  const extractImage = async (postContent: string) => {
+    const imageRegex = /<img.*?src="(.*?)".*?>/g;
+    const matches = postContent.matchAll(imageRegex);
+    const images: string[] = [];
+    let remainingHTML = postContent;
+
+    for (const match of matches) {
+      const imageUrl = match[1];
+      const response = await axios.post("/api/uploadImage", {img: imageUrl});
+      // console.log(response.data)
+      images.push(response.data);
+      remainingHTML = remainingHTML.replace(match[0], ""); // Remove the matched image tag
+    }
+
+    setImageList(images);
+    setPostText(remainingHTML);
+  }
+
+  const handlePost = async () => {
+    const uuid = uuidv4();
+    // console.log(postContent);
+    void extractImage(postContent);
+
+    const reqObj: PostMetadata = {
+      content: postText, 
+      metadataId: uuid as string, 
+      inspirationId: parseInt(pubId as string),
+      image: imageList,
+      title: "test post",
+      profileId: 24, 
+      type: 0,
+    } 
+    const response = await axios.post("/api/post", reqObj);
+    console.log("Post posted:", response.data);
+
+
   }
  
   const handleLikeClick = async () => {
@@ -61,6 +121,25 @@ const PostDetail: React.FC = ({id}) => {
       // Make the API request to post the comment
       const response = await axios.post("/api/post", { content: commentText, postPointId: id as string, profilePointId: parseInt(profileId as string), profileId: 24, type: 1 });
       console.log("Comment posted:", response.data);
+
+      // // contract interaction
+      // const args = {
+      //   profileId: profileId,
+      //   contentURI: response.data.msg,
+      //   profileIdPointed: parseInt(profileId as string),
+      //   pubIdPointed: id as string,
+      //   referenceModuleData: toBytes("0x"),
+      //   collectModule: revertCollectModule,
+      //   collectModuleInitData: encodePacked(["bool"], [true]),
+      //   referenceModule: seedModuleAddress,
+      //   referenceModuleInitData: encodePacked([], []),
+      // };
+      // console.log("comment args", args);
+
+      // commentWrite({
+      //   args: [args],
+      // });
+
       // Clear the comment input
       setCommentText("");
       void fetchPost();
@@ -209,7 +288,7 @@ const PostDetail: React.FC = ({id}) => {
                         <button className="inline-block" onClick={handleMoreInfoButtonClick}><Image src="/moreInfo.png" alt="more info" width={56} height={16}></Image></button>
                     </div>
                     <Editor />
-                    <div className="self-end"><button className="bg-primary p-2 rounded-lg" onClick={handlePost}><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
+                    <div className="self-end mt-16"><button className="bg-primary p-2 rounded-lg" onClick={handlePost}><Image src="/postBtn.png" alt="post button" width={96} height={24}/></button></div>
                 </div>
                 {/* more info card */}
                 {showMore && <InfoCard handleCloseInfoClick={handleCloseInfoClick}/>}

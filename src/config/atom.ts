@@ -236,6 +236,10 @@ export const postDataAtom = atom<PostStruct>({
     title: ""
 });
 
+export const imageListAtom = atom<string[]>([]);
+
+export const postTextAtom = atom("");
+
 // export const zoomedScrollToAtom = atom((get) => {
 //   const zoom = get(zoomAtom);
 //   return sideMenuScrollTo.map((v) => v * zoom);
