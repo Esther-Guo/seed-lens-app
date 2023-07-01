@@ -7,7 +7,7 @@ export default async function handler(
   ) {
     try {
         // console.log(req.body)
-      const reqObj = req.body;
+      const reqObj = req.body as addPubIdReq;
       
       const response = await axios.post("http://101.200.91.164:8080/post/insertPostId", reqObj);
       console.log(response.data)

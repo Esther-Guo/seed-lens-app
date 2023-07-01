@@ -10,7 +10,7 @@ interface PostStruct {
     createTime: string;
     id: number | null;
     images: string[];
-    inspirationId: number | null;
+    inspirationId: string;
     likeNum: number | null;
     postId: string;
     profileId: number | null;
@@ -27,7 +27,7 @@ type IdeaStruct = {
 
 type PostMetadata = {
     metadataId?: string,
-    inspirationId?: number,
+    inspirationId?: string,
     content: string,
     image?: string[],
     title?: string,
@@ -36,4 +36,35 @@ type PostMetadata = {
     profileId: number,
     profilePointId?: number,
     type: number, //0-帖子 1-评论
+}
+
+interface uploadImageReq {
+    img: string
+}
+
+interface uploadImageRes {
+    code: number;
+    data: {msg: string};
+    msg: string;
+}
+
+interface axiosRes {
+    code: number;
+    data: any;
+}
+
+interface likePostRes {
+    code: number;
+    data: {
+        id: number;
+        profileId: number;
+        ifLike: number;
+        likeNum: number;
+    }
+    msg: string
+}
+
+interface addPubIdReq {
+    id: number;
+    psotId: string;
 }

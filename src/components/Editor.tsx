@@ -27,7 +27,7 @@ const Editor = () => {
   const handleContentChange = (value: string) => {
     setPostContent(value);
     const imgs = Array.from(
-      value.matchAll("img[src^=\"data:\"]")
+      value.matchAll(/img[src^=\"data:\"]/)
     );
     // for (const img of imgs) {
     //   img.classList.add("loading");

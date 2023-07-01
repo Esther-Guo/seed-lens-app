@@ -240,12 +240,11 @@ const useLensProxy = () => {
     listener(logs) {
       const log = logs.pop();
       if (log !== undefined) {
-        const logData: { eventName: string; args: (string | bigint)[] } =
-          decodeEventLog({
-            abi: parseAbi([commentCreated]),
-            data: log.data,
-            topics: log.topics,
-          });
+        const logData = decodeEventLog({
+          abi: parseAbi([commentCreated] as string[]),
+          data: log.data,
+          topics: log.topics,
+        }) as { eventName: string; args: (string | bigint)[] };
         console.warn(logData.args);
         setLastCreateCommentEventData(logData.args);
       }

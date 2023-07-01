@@ -229,7 +229,7 @@ export const postDataAtom = atom<PostStruct>({
     createTime: "",
     id: null,
     images: [],
-    inspirationId: null,
+    inspirationId: "",
     likeNum: 0,
     postId: "",
     profileId: null,
