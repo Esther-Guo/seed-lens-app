@@ -372,7 +372,7 @@ export interface Img {
   type: number;
 }
 
-export const mainPageImgListAtom = atom<Img[]>(testImgs.data);
+export const mainPageImgListAtom = atom<Img[]>([]);
 
 export interface ServerResponse {
   msg: string;
