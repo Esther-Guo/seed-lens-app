@@ -215,25 +215,25 @@ export const showEditorAtom = atom(false);
 
 export const showMoreAtom = atom(false);
 
-export const postContentAtom = atom("Hello world!!")
+export const postContentAtom = atom("Hello world!!");
 
-export const langAtom = atom("中文")
+export const langAtom = atom("中文");
 
 export const commentTextAtom = atom("");
 
 export const ifLikeAtom = atom(1);
 
 export const postDataAtom = atom<PostStruct>({
-    comments: [],
-    content: "",
-    createTime: "",
-    id: null,
-    images: [],
-    inspirationId: "",
-    likeNum: 0,
-    postId: "",
-    profileId: null,
-    title: ""
+  comments: [],
+  content: "",
+  createTime: "",
+  id: null,
+  images: [],
+  inspirationId: "",
+  likeNum: 0,
+  postId: "",
+  profileId: null,
+  title: "",
 });
 
 export const imageListAtom = atom<string[]>([]);
@@ -315,3 +315,67 @@ export const hasLensHandleAtom = atom<boolean>(true);
 export const profileIdToCheckAtom = atom<number>(0);
 
 export const lastCreateCommentEventDataAtom = atom<(string | bigint)[]>([]);
+
+const testImgs = {
+  msg: "操作成功",
+  code: 200,
+  data: [
+    {
+      postId: "3-1",
+      title: "Bullet Screen Event",
+      images: [],
+      type: 0,
+    },
+    {
+      postId: "1-1",
+      title: "Genesis Post 创世贴",
+      images: ["http://124.221.52.47:9000/lens/1688277968769.jpg"],
+      type: 0,
+    },
+    {
+      postId: "2-1",
+      title: "Saiber Reading Club 赛博读书会",
+      images: ["http://124.221.52.47:9000/lens/1688278546346.jpg"],
+      type: 0,
+    },
+    {
+      postId: "1-2",
+      title: "PFP-DAO Co-Creation",
+      images: ["http://124.221.52.47:9000/lens/1688278317381.jpg"],
+      type: 0,
+    },
+    {
+      postId: "1-4",
+      title: "Future 未来",
+      images: ["http://124.221.52.47:9000/lens/1688278914723.jpg"],
+      type: 0,
+    },
+    {
+      postId: "1-5",
+      title: "Present 现在",
+      images: ["http://124.221.52.47:9000/lens/1688279064498.jpg"],
+      type: 0,
+    },
+    {
+      postId: "1-3",
+      title: "Past 过去",
+      images: ["http://124.221.52.47:9000/lens/1688278737587.jpg"],
+      type: 0,
+    },
+  ],
+};
+
+export interface Img {
+  postId: string;
+  title: string;
+  images: string[];
+  type: number;
+}
+
+export const mainPageImgListAtom = atom<Img[]>([]);
+
+export interface ServerResponse {
+  msg: string;
+  code: number;
+  data: Img[];
+}

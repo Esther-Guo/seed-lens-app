@@ -95,19 +95,19 @@ const CallExample: NextPage = () => {
     if (address) {
       claimWrite();
     }
-  }, [claimWrite]);
+  }, [address, claimWrite]);
 
   const handleApprove = useCallback(() => {
     if (address) {
       approveWrite();
     }
-  }, [approveWrite]);
+  }, [address, approveWrite]);
 
   const handleClaimReward = useCallback(() => {
     if (address) {
       claimRewardWrite();
     }
-  }, [claimRewardWrite]);
+  }, [address, claimRewardWrite]);
 
   const handleComment = useCallback(() => {
     if (address) {
@@ -150,7 +150,7 @@ const CallExample: NextPage = () => {
         ],
       });
     }
-  }, [createProfileWrite]);
+  }, [address, createProfileWrite, inputHandle]);
 
   const handleCheckProfile = useCallback(() => {
     fetchProfileResult()
