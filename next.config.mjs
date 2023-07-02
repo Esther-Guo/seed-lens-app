@@ -23,7 +23,7 @@ const config = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "101.200.91.164",
+        hostname: "124.221.52.47",
         port: "9000",
         pathname: "/lens/**",
       },
