@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useCallback, useEffect } from "react";
 import { zeroAddress } from "viem";
 import { useAccount, useBalance, useConnect, useDisconnect } from "wagmi";
@@ -179,11 +180,11 @@ function Navi() {
           height={40}
           className="text-md flex items-center justify-center"
         />
-        <p className="text-md flex items-center justify-center px-4 py-2 ">
-          Seed
+        <p className="text-md flex items-center justify-center px-4 py-2 font-second">
+          TEST ALPAH WITH TESTING TOKEN.
         </p>
       </div>
-      <div className="flex space-x-4">
+      <div className="flex space-x-4 font-second">
         {address && (
           <a
             href="https://mumbaifaucet.com/"
@@ -211,6 +212,8 @@ function Navi() {
             approve
           </button>
         )}
+
+        <Link target="_blank" href="https://documents.pfp-dao.io/content-creators/seed-on-chaining-contents" className="proto text-md flex items-center justify-center px-4 py-2 text-green">DOCUMENT</Link>
 
         <button
           className="text-md flex items-center justify-center px-4 py-2 uppercase text-pink"
