@@ -181,7 +181,7 @@ function Navi() {
           className="text-md flex items-center justify-center"
         />
         <p className="text-md flex items-center justify-center px-4 py-2 font-second">
-          TEST ALPAH WITH TESTING TOKEN.
+          TEST ALPHA WITH TESTING TOKEN.
         </p>
       </div>
       <div className="flex space-x-4 font-second">
