@@ -28,6 +28,7 @@ const config = {
         pathname: "/lens/**",
       },
     ],
+    domains: ["https://seed-api.pfp-dao.io"]
 
   // async rewrites() {
   //   return [
