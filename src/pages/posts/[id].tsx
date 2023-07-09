@@ -21,6 +21,7 @@ import {
   postTextAtom,
   profileIdAtom,
   lastCreateCommentEventDataAtom,
+  inspirationIdAtom,
 } from "~/config/atom";
 
 import { type ParsedUrlQuery } from "querystring";
@@ -59,6 +60,7 @@ const PostDetail: NextPage<PostStruct> = (props) => {
   const [ifLike, setIfLike] = useAtom(ifLikeAtom);
   const [imageList, setImageList] = useAtom(imageListAtom);
   const [postText, setPostText] = useAtom(postTextAtom);
+  const [inspirationId, setInspirationIdAtom] = useAtom(inspirationIdAtom);
 
   const lastCreateCommentEventData = useAtomValue(
     lastCreateCommentEventDataAtom
@@ -75,15 +77,16 @@ const PostDetail: NextPage<PostStruct> = (props) => {
     setPostData(props);
   }, []);
 
-  const fetchPost = async (id: string) => {
-    try {
-      const result = await axios(`${serverURL}/post/getPost?id=${id}`);
-      setPostData(result.data as PostStruct);
-    } catch (error) {
-      console.error("Error occurred:", error);
-    }
-  };
-
+  const fetchPost = useCallback(async (postId: string) => {
+      try {
+          const result = await axios(`/api/getPost?id=${postId}`);
+          // console.log(result);
+          setPostData(result.data as PostStruct);
+      } catch (error) {
+          console.error("Error occurred on fetching post:", error);
+      }
+  }, [setPostData])
+ 
   const postContent = useAtomValue(postContentAtom);
 
   const extractImage = async (postContent: string) => {
@@ -146,6 +149,16 @@ const PostDetail: NextPage<PostStruct> = (props) => {
     console.log("liked:", response);
   };
 
+  const handleLastButtonClick = () => {
+    router.back();
+  }
+
+  const handleNextButtonClick = async () => {
+    const response = await axios.post("/api/getNextPost");
+    // console.log("getNext:", response); 
+    router.push(`/posts/${response.data.postId}`);
+  }
+
   const handleIdeaSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -194,6 +207,8 @@ const PostDetail: NextPage<PostStruct> = (props) => {
   ) => {
     setCommentText((event.target as HTMLInputElement).value);
   };
+
+  const maskClass = showEditor ? "fixed inset-0 bg-black/[.5] z-50 flex justify-around items-center" : "";
 
   const handleForkButtonClick = () => {
     setShowEditor(true);
@@ -320,6 +335,7 @@ const PostDetail: NextPage<PostStruct> = (props) => {
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
             {/* Post Ideas */}
@@ -348,6 +364,20 @@ const PostDetail: NextPage<PostStruct> = (props) => {
               {/* display comment */}
               <Idea ideaData={postData.comments} />
             </div>
+
+
+                {/* button group */}
+                <div className="fixed bottom-10 left-10">
+                <button onClick={handleLastButtonClick}>
+                    <Image src="/lastBtn.png" alt="" width="0" height="0" sizes="100vw" className="w-[96px] h-auto"></Image>
+                    {/* <Image src="/lastBtn.png" alt="" fill={true}></Image> */}
+                </button>
+                </div>
+                <div className="fixed bottom-10 end-1/3">
+                <button onClick={handleNextButtonClick}>
+                    <Image src="/nextBtn.png" alt="" width="0" height="0" sizes="100vw" className="w-[96px] h-auto"></Image>
+                </button>
+                </div>
 
             {/* button group */}
             <div className="fixed bottom-10 left-10">
