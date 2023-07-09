@@ -215,6 +215,8 @@ export const showEditorAtom = atom(false);
 
 export const showMoreAtom = atom(false);
 
+export const showEarnDetailAtom = atom(false);
+
 export const postContentAtom = atom("Hello world!!");
 
 export const langAtom = atom("中文");
