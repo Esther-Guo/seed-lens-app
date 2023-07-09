@@ -318,7 +318,7 @@ export const profileIdToCheckAtom = atom<number>(0);
 
 export const lastCreateCommentEventDataAtom = atom<(string | bigint)[]>([]);
 
-const testImgs = {
+export const testImgs = {
   msg: "操作成功",
   code: 200,
   data: [
@@ -326,19 +326,19 @@ const testImgs = {
       postId: "3-1",
       title: "Bullet Screen Event",
       images: [],
-      type: 0,
+      type: 1,
     },
     {
       postId: "1-1",
       title: "Genesis Post 创世贴",
       images: ["http://124.221.52.47:9000/lens/1688277968769.jpg"],
-      type: 0,
+      type: 2,
     },
     {
       postId: "2-1",
       title: "Saiber Reading Club 赛博读书会",
       images: ["http://124.221.52.47:9000/lens/1688278546346.jpg"],
-      type: 0,
+      type: 3,
     },
     {
       postId: "1-2",

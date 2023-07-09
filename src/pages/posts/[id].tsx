@@ -21,6 +21,7 @@ import {
   postTextAtom,
   profileIdAtom,
   lastCreateCommentEventDataAtom,
+  testImgs,
 } from "~/config/atom";
 
 import { type ParsedUrlQuery } from "querystring";
@@ -46,6 +47,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: (result.data as { data: PostStruct }).data,
   };
 };
+
+enum BranchType {
+  Sun = 1,
+  Water,
+  Soil,
+}
 
 const PostDetail: NextPage<PostStruct> = (props) => {
   const router = useRouter();
@@ -378,28 +385,95 @@ const PostDetail: NextPage<PostStruct> = (props) => {
           </div>
           <div className="z-10 mr-8 w-1/3 divide-y divide-primary p-4">
             {/* Inspired by */}
-            <div className="font-second text-3xl text-primary">
-              <Image
-                src="/inspiredIcon.png"
-                alt=""
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="inline-block h-auto w-[30px]"
-              ></Image>{" "}
-              INSPIRED BY
+            <div className="font-second text-light">
+              <div>
+                <Image
+                  src="/inspiredIcon.png"
+                  alt=""
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="inline-block h-auto w-[30px]"
+                ></Image>{" "}
+                <span className="text-3xl text-primary">INSPIRED BY</span>
+              </div>
+              <div className="flex justify-between">
+                <div className="relative w-[150px] h-[150px] aspect-square">
+                  <Image
+                    src="/origin/demoCover.png"
+                    alt=""
+                    fill={true}
+                  ></Image>
+                </div>
+                <div className="flex flex-col ml-3">
+                  <div className="text-2xl">Title</div>
+                  <div className="text-sm mb-2">Book titles are hard. And sadly there is no secret formula for creating the perfect book title. However there ...</div>
+                  <div>
+                    <Image
+                      className="mr-1 inline-block"
+                      src="/likeIcon.png"
+                      alt=""
+                      width={20}
+                      height={20}
+                    ></Image>
+                    336
+                  </div>
+                </div>
+              </div>
             </div>
             {/* Forked */}
-            <div className="font-second text-3xl text-primary">
-              <Image
-                src="/branchIcon.png"
-                alt=""
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="inline-block h-auto w-[30px]"
-              ></Image>{" "}
-              FORKED BRANCHES
+            <div className="font-second">
+              <div>
+                <Image
+                  src="/branchIcon.png"
+                  alt=""
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="inline-block h-auto w-[30px]"
+                ></Image>{" "}
+                <span className="text-3xl text-primary">FORKED BRANCHES</span>
+              </div>
+              <div className="flex flex-wrap">
+                {testImgs.data.map((image, index) => (
+                 
+                  <div
+                    key={index}
+                    // className="image-item align-center relative flex h-180 w-180 justify-center overflow-hidden"
+                    className="relative w-[140px] h-[140px] aspect-square">
+                    <Image
+                    src={image.images[0] as string}
+                    alt={`Image ${index + 1}`}
+                    fill={true}
+                    className="w-full object-cover"
+                  ></Image>
+                    <div className="absolute bottom-0 right-0 mb-1 mr-1">
+                    <Image
+                      src={ image.type == 1? "/sunIcon.png":(image.type == 2? "/waterIcon.png": (image.type == 3? "/soilIcon.png":""))
+                        // switch (image.type) {
+                        //   case 0:
+                        //     "";
+                        //     break;
+                        //   case 1:
+                        //     "/sunIcon.png";
+                        //     break;
+                        //   case 2:
+                        //     "/waterIcon.png";
+                        //     break;
+                        //   case 3:
+                        //     "/soilIcon.png";
+                        // } 
+                        }
+                      alt=""
+                      width="0"
+                      height="0"
+                      sizes="100vw"
+                      className="inline-block h-auto w-[14px]"
+                    ></Image>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <div className="fixed bottom-10 right-56 z-10">

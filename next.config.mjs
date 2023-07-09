@@ -20,14 +20,14 @@ const config = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
-    // remotePatterns: [
-    //   {
-    //     protocol: "http",
-    //     hostname: "124.221.52.47",
-    //     port: "9000",
-    //     pathname: "/lens/**",
-    //   },
-    // ],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "124.221.52.47",
+        port: "9000",
+        pathname: "/lens/**",
+      },
+    ],
     domains: ["https://seed-api.pfp-dao.io"]
 
   // async rewrites() {
