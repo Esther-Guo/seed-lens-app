@@ -43,6 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const result = await axios(
     `${serverURL}/post/getPost?postId=${id as string}`
   );
+  console.log("post data:", result.data);
   return {
     props: (result.data as { data: PostStruct }).data,
   };
@@ -86,6 +87,7 @@ const PostDetail: NextPage<PostStruct> = (props) => {
     try {
       const result = await axios(`${serverURL}/post/getPost?id=${id}`);
       setPostData(result.data as PostStruct);
+      // console.log("post data:", result.data);
     } catch (error) {
       console.error("Error occurred:", error);
     }
@@ -241,14 +243,15 @@ const PostDetail: NextPage<PostStruct> = (props) => {
               {/* cover image */}
               {postData.images && postData.images.length > 0 && (
                 <div>
-                  <Image
+                  <img src={postData.images[0] ?? ""} alt="" className="max-h-80 w-full rounded" />
+                  {/* <Image
                     src={postData.images[0] ?? ""}
                     alt="cover image"
                     width="0"
                     height="0"
                     sizes="100vw"
                     className="max-h-80 w-full rounded"
-                  ></Image>
+                  ></Image> */}
                 </div>
               )}
               <div className="w-2/3 text-light">
@@ -276,13 +279,6 @@ const PostDetail: NextPage<PostStruct> = (props) => {
                 </div>
                 <div>
                   {postData.content}
-                  {/* <p>In this boundless and vibrant tapestry of life, Social Entertainment Equity Distribution (SEED) emerges like a seed, cradling the very essence of human wisdom. It is enswathed in the soil of love, nourished by the rain of unwavering commitment, and basked in the sunlight of impassioned fervor, heralding the advent of an unprecedented social domain. </p>
-                      <br />
-                      <p>SEED, a magnificent decentralized platform built upon the very bedrock of Lens Protocol, dons the sacred mantle of safeguarding the luminescence of creativity. With an unwavering resolve, it etches the authenticity and integrity of content into the annals of time, an indelible inscription for generations to witness. I beseech you to cast your gaze upon the Proof of Thought, a mechanism that stands as a testament to the very fabric of our cognizance and aspirations. Documents https://documents.pfp-dao.io/content-creators/seed-on-chaining-contents </p>
-                      <br />
-                      <p>在这个浩瀚而多彩的世界中，Social Entertainment Equity Distribution（SEED）像一颗孕育着人类智慧的种子，被爱的土壤包裹，被执着的雨水滋润，被热血的阳光鼓励，开创了一个全新的社交领域。 </p>
-                      <br />
-                      <p>SEED，一个基于Lens Protocol宏伟的去中心化链上平台，担当着守护创作之光的神圣使命，将内容的真实性和完整性，永久镌刻在时间的历史上。 敬请关注 Proof of Thought 思想证明机制。 文件说明 https://documents-cn.pfp-dao.io/nei-rong-chuang-zuo-yi-shu-jia/seed-chuang-zuo-zhe-nei-rong-shang-lian </p> */}
                 </div>
                 <div className="mt-2 flex justify-between">
                   <div className="text-darkGray">{postData.createTime}</div>
@@ -439,14 +435,14 @@ const PostDetail: NextPage<PostStruct> = (props) => {
                  
                   <div
                     key={index}
-                    // className="image-item align-center relative flex h-180 w-180 justify-center overflow-hidden"
                     className="relative w-[140px] h-[140px] aspect-square">
-                    <Image
+                    <img src={image.images[0] as string} alt={`Image ${index + 1}`} className=""/>
+                    {/* <Image
                     src={image.images[0] as string}
                     alt={`Image ${index + 1}`}
                     fill={true}
                     className="w-full object-cover"
-                  ></Image>
+                  ></Image> */}
                     <div className="absolute bottom-0 right-0 mb-1 mr-1">
                     <Image
                       src={ image.type == 1? "/sunIcon.png":(image.type == 2? "/waterIcon.png": (image.type == 3? "/soilIcon.png":""))

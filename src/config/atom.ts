@@ -325,7 +325,7 @@ export const testImgs = {
     {
       postId: "3-1",
       title: "Bullet Screen Event",
-      images: [],
+      images: ["http://124.221.52.47:9000/lens/1688281035968.jpg"],
       type: 1,
     },
     {
@@ -337,7 +337,7 @@ export const testImgs = {
     {
       postId: "2-1",
       title: "Saiber Reading Club 赛博读书会",
-      images: ["http://124.221.52.47:9000/lens/1688278546346.jpg"],
+      images: ["http://124.221.52.47:9000/lens/1688278317381.jpg"],
       type: 3,
     },
     {
@@ -349,13 +349,13 @@ export const testImgs = {
     {
       postId: "1-4",
       title: "Future 未来",
-      images: ["http://124.221.52.47:9000/lens/1688278914723.jpg"],
+      images: ["http://124.221.52.47:9000/lens/1688280423299.jpg"],
       type: 0,
     },
     {
       postId: "1-5",
       title: "Present 现在",
-      images: ["http://124.221.52.47:9000/lens/1688279064498.jpg"],
+      images: ["http://124.221.52.47:9000/lens/1688278546346.jpg"],
       type: 0,
     },
     {
