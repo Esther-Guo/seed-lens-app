@@ -381,7 +381,7 @@ const PostDetail: NextPage<PostStruct> = (props) => {
           </div>
           <div className="z-10 mr-8 w-1/3 divide-y divide-primary p-4">
             {/* Inspired by */}
-            <div className="font-second text-light">
+            <div className="font-second text-light mb-4">
               <div>
                 <Image
                   src="/inspiredIcon.png"
@@ -418,7 +418,7 @@ const PostDetail: NextPage<PostStruct> = (props) => {
               </div>
             </div>
             {/* Forked */}
-            <div className="font-second">
+            <div className="font-second pt-4">
               <div>
                 <Image
                   src="/branchIcon.png"
@@ -436,13 +436,13 @@ const PostDetail: NextPage<PostStruct> = (props) => {
                   <div
                     key={index}
                     className="relative w-[140px] h-[140px] aspect-square">
-                    <img src={image.images[0] as string} alt={`Image ${index + 1}`} className=""/>
-                    {/* <Image
+                    {/* <img src={image.images[0] as string} alt={`Image ${index + 1}`} className=""/> */}
+                    <Image
                     src={image.images[0] as string}
                     alt={`Image ${index + 1}`}
                     fill={true}
                     className="w-full object-cover"
-                  ></Image> */}
+                  ></Image>
                     <div className="absolute bottom-0 right-0 mb-1 mr-1">
                     <Image
                       src={ image.type == 1? "/sunIcon.png":(image.type == 2? "/waterIcon.png": (image.type == 3? "/soilIcon.png":""))

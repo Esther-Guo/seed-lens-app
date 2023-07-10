@@ -25,10 +25,10 @@ const config = {
         protocol: "https",
         hostname: "seed-image.pfp-dao.io",
         port: "9000",
-        pathname: "/lens/**",
+        // pathname: "/lens/**",
       },
     ],
-    domains: ["https://seed-api.pfp-dao.io"]
+    // domains: ["https://seed-api.pfp-dao.io"]
 
   // async rewrites() {
   //   return [
